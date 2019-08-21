@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from enum import Enum
 
+from decorator_pattern.exceptions import SizeNotDefineError
+
 
 class Size(Enum):
     TALL = 0.10
@@ -26,3 +28,41 @@ class Beverage(ABC):
     @abstractmethod
     def set_size(self, size: Size):
         raise NotImplementedError('Need concrete implementation')
+
+
+class Espresso(Beverage):
+    def __init__(self):
+        super().__init__()
+        self.description = 'Espresso'
+        self.size = None
+        self.coffee_cost = 1.99
+
+    def cost(self):
+        return self.coffee_cost + self.get_size().value
+
+    def set_size(self, size: Size):
+        self.size = size
+
+    def get_size(self):
+        if not self.size:
+            raise SizeNotDefineError()
+        return self.size
+
+
+class HouseBlend(Beverage):
+    def __init__(self):
+        super().__init__()
+        self.description = 'House Blend Coffee'
+        self.size = None
+        self.coffee_cost = 0.89
+
+    def cost(self):
+        return self.coffee_cost + self.get_size().value
+
+    def set_size(self, size: Size):
+        self.size = size
+
+    def get_size(self):
+        if not self.size:
+            raise SizeNotDefineError()
+        return self.size
